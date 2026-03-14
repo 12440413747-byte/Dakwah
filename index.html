@@ -170,6 +170,63 @@
             animation: fadeIn 0.3s;
         }
         @keyframes fadeIn { from {opacity: 0;} to {opacity: 1;} }
+
+        /* --- POSTER GALLERY STYLES --- */
+        .poster-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-top: 15px; }
+        .poster-card { 
+            background: white; border-radius: 15px; overflow: hidden; 
+            box-shadow: var(--shadow-sm); border: 1px solid #eee; 
+            transition: 0.3s; cursor: pointer;
+        }
+        .poster-card:active { transform: scale(0.97); }
+        .poster-img { width: 100%; height: 180px; object-fit: cover; background: #eee; }
+        .poster-info { padding: 10px; text-align: left; }
+        .poster-title { font-size: 0.85rem; font-weight: 800; color: var(--primary); }
+        .poster-desc { font-size: 0.7rem; color: var(--text-muted); margin-top: 2px; }
+
+        /* CSS Tambahan agar gambar tampil besar */
+    .poster-grid { 
+        display: flex; 
+        flex-direction: column; /* Membuat urutan ke bawah (satu kolom) */
+        gap: 25px; 
+        margin-top: 15px; 
+    }
+
+    .poster-card { 
+        background: white; 
+        border-radius: 20px; 
+        overflow: hidden; 
+        box-shadow: var(--shadow-md); 
+        border: 1px solid #eee; 
+        transition: 0.3s;
+    }
+
+    .poster-img { 
+        width: 100%; 
+        height: auto; /* Agar tinggi gambar menyesuaikan proporsi aslinya (tidak gepeng) */
+        display: block;
+        background: #eee; 
+    }
+
+    .poster-info { 
+        padding: 15px; 
+        text-align: left; 
+        border-top: 1px solid #f1f5f9;
+    }
+
+    .poster-title { 
+        font-size: 1rem; 
+        font-weight: 800; 
+        color: var(--primary); 
+    }
+
+    .poster-desc { 
+        font-size: 0.8rem; 
+        color: var(--text-muted); 
+        margin-top: 4px; 
+        font-weight: 600;
+    }
+
     </style>
 </head>
 <body>
@@ -204,6 +261,9 @@
             <div class="card" onclick="openModal('zakatModal')"><i>💰</i><h3>Zakat Maal</h3><p>Hitung 2.5%</p></div>
             <div class="card" onclick="openModal('doaModal')"><i>📖</i><h3>Doa Harian</h3><p>Teks & Arti</p></div>
             <div class="card" onclick="openPage('game-menu')"><i>🎮</i><h3>Pusat Game</h3><p>Edu-Religi</p></div>
+            <div class="card" onclick="openPage('poster-page')" style="border: 2px solid var(--accent);">
+                <i>🖼️</i><h3>Galeri Karya</h3><p>Poster Dakwah</p>
+            </div>
         </div>
 
         <div class="section-title">🤵 Developer</div>
@@ -215,6 +275,20 @@
             </div>
         </div>
     </div>
+
+    <div id="poster-page" class="page hidden">
+        <button onclick="openPage('home-page')" style="background:none; border:none; color:var(--primary); font-weight:800; cursor:pointer; margin-bottom:15px; font-size: 0.85rem; display:flex; align-items:center; gap:5px;">← KEMBALI KE BERANDA</button>
+        <div class="section-title">🖼️ Galeri Poster Dakwah</div>
+        
+        <div class="poster-grid">
+            <div class="poster-card" onclick="alert('Ini adalah Poster Karya Daffa')">
+                <img src="ad6314ce-39ee-4bd2-b2a7-ccc29fc4ac66.jfif" alt="Poster Dakwah" class="poster-img">
+                <div class="poster-info">
+                    <p class="poster-title">Karya Poster</p>
+                    <p class="poster-desc">Oleh: Daffa Abdul Hakim</p>
+                </div>
+            </div>
+        </div>
 
     <div id="game-menu" class="page hidden">
         <button onclick="openPage('home-page')" style="background:none; border:none; color:var(--primary); font-weight:800; cursor:pointer; margin-bottom:15px; font-size: 0.85rem; display:flex; align-items:center; gap:5px;">← KEMBALI KE BERANDA</button>
