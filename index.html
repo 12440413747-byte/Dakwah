@@ -195,6 +195,7 @@
         <div class="big-card">
             <div class="video-wrapper">
                 <iframe 
+                    id="videoPlayer"
                     src="https://www.youtube.com/embed/81ncdCFsKXE" 
                     frameborder="0" 
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
@@ -207,6 +208,7 @@
             </div>
             <div class="video-wrapper">
                 <iframe 
+                    id="videoPlayer"
                     src="https://www.youtube.com/embed/oQg4Oesm-Ag?si" 
                     frameborder="0" 
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
@@ -463,6 +465,34 @@
             setTimeout(() => { notif.style.display = "none"; }, 2000);
         }
     }
+
+    function openPage(id) { 
+    // 1. Sembunyikan semua halaman
+    document.querySelectorAll('.page').forEach(p => p.classList.add('hidden')); 
+    
+    // 2. Tampilkan halaman yang dipilih
+    document.getElementById(id).classList.remove('hidden'); 
+    
+    // 3. LOGIKA STOP VIDEO: Jika kita kembali ke 'home-page' atau 'game-menu'
+    if (id === 'home-page' || id === 'game-menu') {
+        const iframe = document.getElementById('videoPlayer');
+        if (iframe) {
+            const currentSrc = iframe.src;
+            iframe.src = ""; // Kosongkan src untuk stop total
+            iframe.src = currentSrc; // Isi kembali agar video reset ke awal (00:00)
+        }
+        
+        // Jika ada video di poster-page juga (yang dari Drive), lakukan hal yang sama:
+        const driveIframe = document.querySelector('#poster-page iframe');
+        if (driveIframe) {
+            const driveSrc = driveIframe.src;
+            driveIframe.src = "";
+            driveIframe.src = driveSrc;
+        }
+    }
+
+    window.scrollTo(0,0);
+}
 </script>
 </body>
 </html>
