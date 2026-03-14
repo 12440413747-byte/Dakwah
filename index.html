@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Portal MD Masterpiece | Rozaq Azizul Hakim</title>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Plus+Jakarta+Sans:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #064e3b;
+            --primary-dark: #032e23;
+            --primary-gradient: linear-gradient(135deg, #064e3b 0%, #0a7a5c 100%);
+            --accent: #d4af37;
+            --accent-light: #f3e5ab;
+            --bg: #f1f5f9;
+            --card: #ffffff;
+            --text: #0f172a;
+            --text-muted: #64748b;
+            --radius: 24px;
+            --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        
+        body { 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            background: var(--bg); 
+            color: var(--text); 
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* --- HEADER --- */
+        header { 
+            background: var(--primary-gradient); 
+            padding: 2rem 1.5rem; 
+            text-align: center; 
+            border-bottom: 5px solid var(--accent); 
+            color: white; 
+            position: relative; /* Diubah dari sticky agar tidak menabrak box waktu saat scroll awal */
+            border-radius: 0 0 35px 35px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            z-index: 1001;
+        }
+        header h1 { font-family: 'Amiri', serif; font-size: 2.3rem; letter-spacing: 1px; line-height: 1; }
+        header p { font-size: 0.65rem; font-weight: 800; letter-spacing: 2px; opacity: 0.9; margin-top: 8px; text-transform: uppercase; }
+
+        /* --- FIX: MARQUEE & REALTIME SPACING --- */
+        .marquee-container {
+            background: var(--primary-dark);
+            color: var(--accent);
+            padding: 12px 0; /* Sedikit diperlebar */
+            font-size: 0.8rem;
+            font-weight: 700;
+            overflow: hidden;
+            display: flex;
+            border-bottom: 2px solid var(--accent);
+            position: relative;
+            z-index: 999;
+        }
+        .marquee-content {
+            white-space: nowrap;
+            display: inline-block;
+            animation: marquee 35s linear infinite;
+            padding-left: 20px;
+        }
+        @keyframes marquee {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+        }
+
+        .realtime-box {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 15px 25px;
+            margin: 15px auto 25px; /* FIX: Margin atas positif agar tidak tumpang tindih */
+            width: 88%;
+            border-radius: 20px;
+            box-shadow: var(--shadow-md);
+            border: 1px solid white;
+            position: relative;
+            z-index: 10;
+        }
+        #clock { font-size: 1.4rem; font-weight: 800; color: var(--primary); font-variant-numeric: tabular-nums; }
+        #date-text { font-size: 0.75rem; color: var(--text-muted); font-weight: 700; text-align: right; line-height: 1.2; }
+
+        .container { padding: 0 20px 50px; max-width: 500px; margin: 0 auto; }
+        .hidden { display: none !important; }
+
+        .section-title { 
+            margin: 25px 0 15px; font-weight: 800; font-size: 0.9rem; 
+            color: var(--primary); display: flex; align-items: center; gap: 10px;
+            text-transform: uppercase; letter-spacing: 1.5px;
+        }
+
+        .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
+
+        .card { 
+            background: var(--card); 
+            padding: 22px 15px; 
+            border-radius: var(--radius); 
+            text-align: center; 
+            border: 1px solid rgba(255,255,255,1);
+            box-shadow: var(--shadow-sm);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            display: flex; flex-direction: column; align-items: center;
+        }
+        .card:active { transform: scale(0.95); background: #f8fafc; border-color: var(--accent); }
+        .card i { font-size: 2.5rem; margin-bottom: 12px; display: block; filter: drop-shadow(0 4px 5px rgba(0,0,0,0.1)); }
+        .card h3 { font-size: 0.95rem; font-weight: 800; color: var(--primary); }
+        .card p { font-size: 0.7rem; color: var(--text-muted); margin-top: 4px; }
+
+        /* --- MODALS --- */
+        .modal { 
+            position: fixed; inset: 0; background: rgba(15, 23, 42, 0.75); 
+            backdrop-filter: blur(8px); display: flex; align-items: center; 
+            justify-content: center; z-index: 2000; padding: 20px;
+        }
+        .modal-content { 
+            background: white; padding: 30px; border-radius: 30px; 
+            width: 100%; max-width: 400px; position: relative; 
+            border-top: 6px solid var(--primary);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            max-height: 85vh; overflow-y: auto;
+        }
+        .close-x { position: absolute; top: 15px; right: 20px; font-size: 28px; color: var(--text-muted); cursor: pointer; }
+
+        .btn-action { 
+            width: 100%; padding: 16px; background: var(--primary-gradient); 
+            color: white; border: none; border-radius: 16px; font-weight: 800; 
+            margin-top: 10px; cursor: pointer; transition: 0.3s; font-size: 0.95rem;
+            box-shadow: 0 4px 10px rgba(6, 78, 59, 0.2);
+        }
+        .btn-action:active { transform: translateY(2px); box-shadow: none; }
+
+        .input-premium {
+            width: 100%; padding: 15px; border-radius: 14px; 
+            border: 2px solid #e2e8f0; margin-bottom: 15px;
+            font-size: 1.1rem; font-weight: 700; text-align: center; outline: none;
+            text-transform: uppercase;
+        }
+        .input-premium:focus { border-color: var(--primary); }
+
+        footer { text-align: center; padding: 40px 20px; color: var(--text-muted); font-size: 0.75rem; font-weight: 700; letter-spacing: 1px; }
+
+        /* KETUK BERKAH STYLES */
+        #tc { height: 250px; background: #f8fafc; border: 2px dashed #cbd5e1; border-radius: 20px; position: relative; overflow: hidden; margin-top: 10px; }
+        .tap-particle {
+            position: absolute; color: var(--accent); font-weight: 800; font-size: 0.8rem;
+            pointer-events: none; animation: floatUp 0.6s ease-out forwards; z-index: 20;
+        }
+        @keyframes floatUp { from { opacity: 1; transform: translateY(0); } to { opacity: 0; transform: translateY(-50px); } }
+
+        /* SCORE ANIMATION */
+        .result-box { text-align: center; animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        @keyframes popIn { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+        #game-notif {
+            margin-bottom: 15px;
+            padding: 10px;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 0.85rem;
+            display: none;
+            animation: fadeIn 0.3s;
+        }
+        @keyframes fadeIn { from {opacity: 0;} to {opacity: 1;} }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Portal Dakwah</h1>
+    <p>Management by Rozaq Azizul Hakim</p>
+</header>
+
+<div class="marquee-container">
+    <div class="marquee-content">
+        ✨ Selamat Datang di Portal Dakwah - Rozaq Azizul Hakim | "Sampaikanlah walau satu ayat" (HR. Bukhari) | Sukseskan Manajemen Dakwah UIN Suska Riau 2026 ✨
+    </div>
+</div>
+
+<div class="realtime-box">
+    <div id="clock">00:00:00</div>
+    <div id="date-text">Memuat...</div>
+</div>
+
+<div class="container">
+    <div id="home-page" class="page">
+        <div class="card" style="margin-bottom: 25px; background: var(--primary-gradient); color: white; text-align: left; padding: 25px; align-items: flex-start; border-radius: 25px; border: none; box-shadow: 0 15px 25px -5px rgba(6, 78, 59, 0.3);">
+            <p style="font-size: 0.65rem; text-transform: uppercase; font-weight: 800; color: var(--accent-light); letter-spacing: 1px;">Ayat Pilihan Hari Ini</p>
+            <h2 style="font-family: 'Amiri', serif; font-size: 2rem; margin: 12px 0;">فَٱذْكُرُونِىٓ أَذْكُرْكُمْ</h2>
+            <p style="font-size: 0.85rem; font-style: italic; opacity: 0.9; line-height: 1.4; color: #f09433;">"Ingatlah kepada-Ku, maka Aku pun akan ingat kepadamu."</p>
+        </div>
+
+        <div class="section-title">📌 Layanan Utama</div>
+        <div class="grid">
+            <div class="card" onclick="openModal('sholatModal')"><i>🕌</i><h3>Jadwal Sholat</h3><p>Pekanbaru</p></div>
+            <div class="card" onclick="openModal('zakatModal')"><i>💰</i><h3>Zakat Maal</h3><p>Hitung 2.5%</p></div>
+            <div class="card" onclick="openModal('doaModal')"><i>📖</i><h3>Doa Harian</h3><p>Teks & Arti</p></div>
+            <div class="card" onclick="openPage('game-menu')"><i>🎮</i><h3>Pusat Game</h3><p>Edu-Religi</p></div>
+        </div>
+
+        <div class="section-title">🤵 Developer</div>
+        <div class="card" onclick="openModal('profileModal')" style="flex-direction: row; gap: 15px; text-align: left; padding: 15px; align-items: center; border: 1px solid rgba(0,0,0,0.05);">
+            <img src="file_rozaq.jpg" alt="Profile" style="width: 50px; height: 50px; border-radius: 50%; border: 2px solid var(--accent); object-fit: cover; background: #eee;">
+            <div>
+                <h3 style="font-size: 0.9rem;">Rozaq Azizul Hakim</h3>
+                <p style="font-size: 0.7rem;">Prodi Manajemen Dakwah - UIN Suska</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="game-menu" class="page hidden">
+        <button onclick="openPage('home-page')" style="background:none; border:none; color:var(--primary); font-weight:800; cursor:pointer; margin-bottom:15px; font-size: 0.85rem; display:flex; align-items:center; gap:5px;">← KEMBALI KE BERANDA</button>
+        <div class="section-title">🎯 Pilih Permainan</div>
+        <div class="grid">
+            <div class="card" onclick="initGame('quiz')"><i>📝</i><h3>Tes Iman</h3><p>10 Soal Kuis</p></div>
+            <div class="card" onclick="initGame('word')"><i>🧩</i><h3>Susun Kata</h3><p>Istilah Islami</p></div>
+            <div class="card" onclick="initGame('tasbih')"><i>📿</i><h3>Tasbih</h3><p>Digital Counter</p></div>
+        </div>
+    </div>
+
+    <div id="game-screen" class="page hidden">
+        <button onclick="openPage('game-menu')" style="background:none; border:none; color:var(--primary); font-weight:800; cursor:pointer; margin-bottom:15px; font-size: 0.85rem;">← KELUAR KE MENU</button>
+        <div id="game-box" class="card" style="width:100%; cursor:default; padding:25px; min-height: 420px; box-shadow: var(--shadow-md);"></div>
+    </div>
+</div>
+
+<div id="sholatModal" class="modal hidden" onclick="checkClose(event, 'sholatModal')">
+    <div class="modal-content">
+        <span class="close-x" onclick="closeModal('sholatModal')">&times;</span>
+        <h3 style="text-align:center; color:var(--primary); margin-bottom:20px; font-weight:800;">Waktu Sholat Pekanbaru</h3>
+        <div style="background: #f8fafc; border-radius: 15px; padding: 10px;">
+            <div style="display:flex; justify-content:space-between; padding:12px; border-bottom:1px solid #e2e8f0;"><span>Subuh</span><span style="color:var(--primary); font-weight:800;">04:52 WIB</span></div>
+            <div style="display:flex; justify-content:space-between; padding:12px; border-bottom:1px solid #e2e8f0;"><span>Dzuhur</span><span style="color:var(--primary); font-weight:800;">12:14 WIB</span></div>
+            <div style="display:flex; justify-content:space-between; padding:12px; border-bottom:1px solid #e2e8f0;"><span>Ashar</span><span style="color:var(--primary); font-weight:800;">15:20 WIB</span></div>
+            <div style="display:flex; justify-content:space-between; padding:12px; border-bottom:1px solid #e2e8f0;"><span>Maghrib</span><span style="color:var(--primary); font-weight:800;">18:18 WIB</span></div>
+            <div style="display:flex; justify-content:space-between; padding:12px;"><span>Isya</span><span style="color:var(--primary); font-weight:800;">19:27 WIB</span></div>
+        </div>
+    </div>
+</div>
+
+<div id="zakatModal" class="modal hidden" onclick="checkClose(event, 'zakatModal')">
+    <div class="modal-content">
+        <span class="close-x" onclick="closeModal('zakatModal')">&times;</span>
+        <h3 style="text-align:center; margin-bottom:15px; font-weight:800;">Kalkulator Zakat</h3>
+        <p style="text-align:center; font-size:0.75rem; color:var(--text-muted); margin-bottom:20px;">Masukkan nominal harta</p>
+        <input type="number" id="harta-input" class="input-premium" placeholder="Rp 0">
+        <button class="btn-action" onclick="hitungZakat()">HITUNG ZAKAT</button>
+        <div id="zakat-res" class="hidden" style="margin-top:20px; padding:15px; background:#f0fdf4; border:2px solid var(--primary); border-radius:15px; text-align:center; font-weight:800; color:var(--primary);"></div>
+    </div>
+</div>
+
+<div id="doaModal" class="modal hidden" onclick="checkClose(event, 'doaModal')">
+    <div class="modal-content">
+        <span class="close-x" onclick="closeModal('doaModal')">&times;</span>
+        <h3 style="text-align:center; margin-bottom:20px; font-weight:800;">Doa Pilihan</h3>
+        <div style="text-align:right; background: #fff9e6; padding: 15px; border-radius: 15px; border-left: 4px solid var(--accent);">
+            <p style="font-weight:800; color:var(--primary); font-size:0.75rem; text-align:left;">DOA KEDUA ORANG TUA</p>
+            <p style="font-family:'Amiri'; font-size:1.6rem; margin:10px 0;">اَللّهُمَّ اغْفِرْلِيْ وَلِوَالِدَيَّ وَارْحَمْهُمَا كَمَا رَبَّيَانِيْ صَغِيْرًا</p>
+            <p style="font-size:0.75rem; color:var(--text-muted); text-align:left; font-style:italic;">"Wahai Tuhanku, ampunilah aku dan kedua orang tuaku, sayangilah mereka sebagaimana mereka menyayangiku sewaktu kecil."</p>
+        </div>
+    </div>
+</div>
+
+<div id="profileModal" class="modal hidden" onclick="checkClose(event, 'profileModal')">
+    <div class="modal-content" style="text-align:center;">
+        <span class="close-x" onclick="closeModal('profileModal')">&times;</span>
+        <div style="position:relative; width:100px; height:100px; margin:0 auto 15px;">
+            <img src="file_rozaq.jpg" alt="Profile" style="width:100%; height:100%; object-fit:cover; border-radius:50%; border:3px solid var(--accent); box-shadow: var(--shadow-md);">
+        </div>
+        <h2 style="font-size: 1.2rem; font-weight:800;">Rozaq Azizul Hakim</h2>
+        <p style="color:var(--accent); font-weight:800; font-size:0.8rem; margin-top:2px;">NIM: 12440413747</p>
+        <div style="margin:20px 0; padding:10px; background:#f1f5f9; border-radius:12px;">
+            <p style="font-size:0.75rem; color:var(--text); font-weight:600;">Mahasiswa Manajemen Dakwah</p>
+            <p style="font-size:0.7rem; color:var(--text-muted);">UIN Sultan Syarif Kasim Riau</p>
+        </div>
+        <a href="https://www.instagram.com/rozaqhakim" target="_blank" style="text-decoration: none;">
+            <button class="btn-action" style="background: linear-gradient(45deg, #f09433 0%, #dc2743 100%);">Follow Instagram</button>
+        </a>
+    </div>
+</div>
+
+<footer>
+    ROZAQ AZIZUL HAKIM &copy; 2026<br>PRODI MANAJEMEN DAKWAH UIN SUSKA RIAU
+</footer>
+
+<script>
+    // --- SYSTEM ENGINE ---
+    function updateRealTime() {
+        const now = new Date();
+        const clock = document.getElementById('clock');
+        const dateText = document.getElementById('date-text');
+        if(clock){
+            clock.innerText = now.toLocaleTimeString('id-ID', { hour12: false });
+            const days = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
+            const months = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
+            dateText.innerHTML = `${days[now.getDay()]}<br>${now.getDate()} ${months[now.getMonth()]} ${now.getFullYear()}`;
+        }
+    }
+    setInterval(updateRealTime, 1000);
+    updateRealTime();
+
+    function openPage(id) { 
+        if(gameTimer) clearInterval(gameTimer); 
+        document.querySelectorAll('.page').forEach(p => p.classList.add('hidden')); 
+        document.getElementById(id).classList.remove('hidden'); 
+    }
+    function openModal(id) { document.getElementById(id).classList.remove('hidden'); }
+    function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
+    function checkClose(e, id) { if(e.target.id === id) closeModal(id); }
+
+    function hitungZakat() { 
+        let v = document.getElementById('harta-input').value; 
+        if(v > 0) { 
+            let r = v * 0.025; 
+            let b = document.getElementById('zakat-res'); 
+            b.innerHTML = "Wajib Zakat: Rp " + new Intl.NumberFormat('id-ID').format(r); 
+            b.classList.remove('hidden'); 
+        } 
+    }
+
+    // --- GAME ENGINE ---
+    let gameTimer;
+    let wordIdx = 0, wordScore = 0;
+    const words = [
+        { w: "DAKWAH", h: "Mengajak ke jalan Allah" },
+        { w: "MADANI", h: "Masyarakat yang beradab" },
+        { w: "TAWAKAL", h: "Berserah diri kepada Allah" },
+        { w: "HIJRAH", h: "Berpindah ke arah lebih baik" },
+        { w: "AKHLAK", h: "Budi pekerti/perilaku" }
+    ];
+
+    function initGame(type) {
+        openPage('game-screen');
+        const box = document.getElementById('game-box');
+        if(type === 'word') {
+            wordIdx = 0; wordScore = 0;
+            loadWordGame();
+        } else if(type === 'tasbih') {
+            box.innerHTML = `<h3>Tasbih Digital</h3><div id="count" style="font-size:5rem; font-weight:900; margin:20px 0; color:var(--primary);">0</div><button class="btn-action" onclick="document.getElementById('count').innerText++; if(navigator.vibrate) navigator.vibrate(40);" style="width:120px; height:120px; border-radius:50%; font-size:2.5rem; display:flex; align-items:center; justify-content:center; margin:0 auto;">📿</button><p style="margin-top:25px; color:red; font-size:0.8rem; font-weight:800; cursor:pointer;" onclick="initGame('tasbih')">RESET</p>`;
+        } else if(type === 'tap') {
+            tScore = 0; tTime = 10;
+            box.innerHTML = `<h3>Ketuk Berkah</h3>
+            <div id="game-stats" style="display:flex; justify-content:space-around; width:100%; margin-bottom:15px; font-weight:800;">
+                <div style="color:var(--primary);">SKOR: <span id="ts">0</span></div>
+                <div style="color:red;">WAKTU: <span id="tm">10</span>s</div>
+            </div>
+            <div id="tc" style="height:250px; background:#f8fafc; border:2px dashed #cbd5e1; border-radius:20px; position:relative; overflow:hidden; touch-action:none;">
+                <div id="tg" style="position:absolute; font-size:3.5rem; cursor:pointer; display:none; user-select:none; z-index:100; transition: none;" onclick="hitTap(event)">🕌</div>
+                <div id="start-overlay" style="position:absolute; inset:0; background:rgba(255,255,255,0.95); display:flex; align-items:center; justify-content:center; z-index:200;">
+                    <button class="btn-action" style="width:70%;" onclick="startTap()">MULAI SEKARANG!</button>
+                </div>
+            </div>`;
+        } else if(type === 'quiz') {
+            currentIdx = 0; quizScore = 0; loadQuizQuestion();
+        }
+    }
+    // --- LOGIKA GAME LAINNYA ---
+    function loadWordGame() {
+        if(wordIdx >= words.length) {
+            document.getElementById('game-box').innerHTML = `<h3>Selesai!</h3><p>Skor Anda:</p><h1 style="font-size:4rem; color:var(--accent);">${wordScore}/${words.length}</h1><button class="btn-action" onclick="initGame('word')">MAIN LAGI</button>`;
+            return;
+        }
+        let item = words[wordIdx];
+        let scrambled = item.w.split('').sort(() => Math.random() - 0.5).join('');
+        document.getElementById('game-box').innerHTML = `
+            <h3>Susun Kata</h3>
+            <div id="game-notif" style="margin-bottom:10px; padding:8px; border-radius:8px; display:none; font-weight:800; font-size:0.8rem;"></div>
+            <p style="color:var(--text-muted); font-size:0.75rem;">Soal ${wordIdx + 1}/${words.length}</p>
+            <div style="background:#f1f5f9; padding:15px; border-radius:15px; margin:15px 0;">
+                <h2 style="letter-spacing:8px; color:var(--primary);">${scrambled}</h2>
+            </div>
+            <p style="font-size:0.85rem; font-style:italic; margin-bottom:15px;">" ${item.h} "</p>
+            <input type="text" id="word-input" class="input-premium" placeholder="Ketik Jawaban...">
+            <button class="btn-action" onclick="checkWord()">KONFIRMASI</button>
+        `;
+    }
+
+    function checkWord() {
+        let ans = document.getElementById('word-input').value.toUpperCase();
+        const notif = document.getElementById('game-notif');
+        if(ans === words[wordIdx].w) { 
+            wordScore++; 
+            notif.style.display = "block"; notif.style.background = "#dcfce7"; notif.style.color = "#166534"; notif.innerText = "BENAR! ✨";
+            setTimeout(() => { wordIdx++; loadWordGame(); }, 1200);
+        } else { 
+            notif.style.display = "block"; notif.style.background = "#fee2e2"; notif.style.color = "#991b1b"; notif.innerText = "SALAH! ❌";
+        }
+    }
+
+    const questions = [
+        { q: "Siapakah pencipta alam semesta?", a: ["Malaikat", "Allah SWT", "Nabi"], c: 1 },
+        { q: "Ada berapa jumlah Rukun Iman?", a: ["5", "6", "7"], c: 1 },
+        { q: "Kitab suci Al-Qur'an diturunkan kepada?", a: ["Nabi Musa", "Nabi Isa", "Nabi Muhammad"], c: 2 },
+        { q: "Rukun Islam yang pertama adalah?", a: ["Sholat", "Syahadat", "Puasa"], c: 1 },
+        { q: "Malaikat penyampai wahyu?", a: ["Jibril", "Mikail", "Izrail"], c: 0 },
+        { q: "Jumlah rakaat sholat fardhu sehari semalam?", a: ["15", "17", "20"], c: 1 },
+        { q: "Peristiwa Nabi ke Sidratul Muntaha?", a: ["Hijrah", "Isra Mi'raj", "Fathul Makkah"], c: 1 },
+        { q: "Zakat di bulan Ramadhan disebut?", a: ["Zakat Maal", "Zakat Fitrah", "Sedekah"], c: 1 },
+        { q: "Bapak para Nabi (Abul Anbiya)?", a: ["Adam", "Ibrahim", "Nuh"], c: 1 },
+        { q: "Beribadah seolah melihat Allah disebut?", a: ["Ihsan", "Iman", "Islam"], c: 0 }
+    ];
+    let currentIdx = 0, quizScore = 0;
+    
+    function loadQuizQuestion() {
+        const q = questions[currentIdx];
+        const progress = ((currentIdx + 1) / questions.length) * 100;
+        document.getElementById('game-box').innerHTML = `<h3>Tes Iman</h3><p>Soal ${currentIdx+1}/${questions.length}</p><div style="width:100%; height:6px; background:#eee; border-radius:10px; margin:10px 0; overflow:hidden;"><div style="width:${progress}%; height:100%; background:var(--primary);"></div></div><p style="margin:15px 0; font-weight:700;">${q.q}</p><div id="opts"></div>`;
+        q.a.forEach((opt, i) => {
+            const btn = document.createElement('button'); btn.className = "btn-action"; btn.style.background="white"; btn.style.color="var(--text)"; btn.style.border="2px solid #f1f5f9"; btn.style.textAlign="left"; btn.innerText = (i+1) + ". " + opt;
+            btn.onclick = () => { if(i === q.c) quizScore++; currentIdx++; if(currentIdx < questions.length) loadQuizQuestion(); else showQuizResult(); };
+            document.getElementById('opts').appendChild(btn);
+        });
+    }
+
+    function showQuizResult() {
+        const final = Math.round(quizScore/questions.length*100);
+        let badge = final === 100 ? "💎" : (final >= 70 ? "🌟" : "📚");
+        document.getElementById('game-box').innerHTML = `
+            <div class="result-box">
+                <span style="font-size:5rem;">${badge}</span>
+                <h2 style="color:var(--primary); margin:10px 0;">HASIL AKHIR</h2>
+                <h1 style="font-size:4rem; margin-bottom:10px;">${final}%</h1>
+                <button class="btn-action" onclick="initGame('quiz')">ULANGI TES</button>
+            </div>`;
+    }
+</script>
+</body>
+</html>
